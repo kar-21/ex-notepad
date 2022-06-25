@@ -3,13 +3,16 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
 const indexRouter = require("./routes/index");
 const loginRouter = require("./routes/login");
 
-const app = express();
+dotenv.config();
 
-const port = 3005;
+const app = express();
+app.use(cors());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -40,7 +43,7 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   console.log("Listening to port 2005");
 });
 

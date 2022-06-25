@@ -1,5 +1,4 @@
 const express = require("express");
-const env = require("../environment.env");
 const google = require("googleapis");
 
 const router = express.Router();
@@ -10,13 +9,13 @@ router.get("/view", (req, res, next) => {
 });
 
 router.get("/", (req, res, next) => {
-  res.render("index", { title: "Express", redirectURL: urlGoogle() });
+  res.send({ redirectURL: urlGoogle() });
 });
 
 const googleConfig = {
-  clientId: env.env.google.clientId,
-  clientSecret: env.env.google.clientSecret,
-  redirect: env.env.google.redirect,
+  clientId: process.env.ClientID,
+  clientSecret: process.env.ClientSecret,
+  redirect: process.env.RedirectURI,
 };
 
 const createConnection = () => {
@@ -25,7 +24,7 @@ const createConnection = () => {
     googleConfig.clientSecret,
     googleConfig.redirect
   );
-}
+};
 
 const defaultScope = [
   "https://www.googleapis.com/auth/plus.me",
@@ -39,15 +38,15 @@ const getConnectionUrl = (auth) => {
     prompt: "consent",
     scope: defaultScope,
   });
-}
+};
 
 const urlGoogle = () => {
   const auth = createConnection();
   const url = getConnectionUrl(auth);
   return url;
-}
+};
 
-const getGoogleAccountFromCode = async(code, response) => {
+const getGoogleAccountFromCode = async (code, response) => {
   const auth = createConnection();
 
   const { tokens } = await auth.getToken(code);
@@ -65,6 +64,6 @@ const getGoogleAccountFromCode = async(code, response) => {
       response.redirect("/data");
     }
   );
-}
+};
 
 module.exports = router;
