@@ -1,9 +1,9 @@
 const express = require("express");
-const google = require("googleapis");
+const { google } = require("googleapis");
+const request = require("request");
 
 const router = express.Router();
 
-/* GET users listing. */
 router.get("/view", (req, res, next) => {
   res.send("respond with a resource");
 });
@@ -12,17 +12,15 @@ router.get("/", (req, res, next) => {
   res.send({ redirectURL: urlGoogle() });
 });
 
-const googleConfig = {
-  clientId: process.env.ClientID,
-  clientSecret: process.env.ClientSecret,
-  redirect: process.env.RedirectURI,
-};
+router.get("/redirectURI", (req, res, next) => {
+  getGoogleAccountFromCode(req.query.code, res);
+});
 
 const createConnection = () => {
-  return new google.google.auth.OAuth2(
-    googleConfig.clientId,
-    googleConfig.clientSecret,
-    googleConfig.redirect
+  return new google.auth.OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URI
   );
 };
 
@@ -61,6 +59,7 @@ const getGoogleAccountFromCode = async (code, response) => {
           .status(500)
           .send(`some unexpected/uncaught async exception is thrown ${err}`);
       userData = body;
+      console.log(">>> userData", userData);
       response.redirect("/data");
     }
   );
