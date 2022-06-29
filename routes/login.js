@@ -1,6 +1,7 @@
 const express = require("express");
 const { google } = require("googleapis");
 const request = require("request");
+const jwt = require("jsonwebtoken");
 
 const googleUserSchema = require("../schemas/googleUser.schema");
 
@@ -61,13 +62,30 @@ const getGoogleAccountFromCode = async (code, response) => {
           .status(500)
           .send(`some unexpected/uncaught async exception is thrown ${err}`);
       console.log(">>> userData", body);
-      if (!(await googleUserSchema.findOne({ sub: body.sub }))) {
+      let token;
+      const userFromDB = await googleUserSchema.findOne({ sub: body.sub });
+      if (!userFromDB) {
         const userInfo = new googleUserSchema({ ...body });
         await userInfo.save();
+        token = jwt.sign(
+          { userId: body.sub, givenName: body.givenName },
+          process.env.SECRET,
+          { expiresIn: "1d" }
+        );
       } else {
         console.log(">>> user found");
+        token = jwt.sign(
+          { userId: userFromDB.sub, givenName: userFromDB.givenName },
+          process.env.SECRET,
+          { expiresIn: "1d" }
+        );
       }
-      response.redirect("/data");
+      console.log(">>>", process.env.NODE_ENV === "development");
+      response.redirect(
+        process.env.NODE_ENV === "development"
+          ? `${process.env.FRONTEND_API_LOCAL}/token/?token=${token}`
+          : `${process.env.FRONTEND_API_PROD}/token/?token=${token}`
+      );
     }
   );
 };
