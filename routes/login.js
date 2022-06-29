@@ -2,6 +2,8 @@ const express = require("express");
 const { google } = require("googleapis");
 const request = require("request");
 
+const googleUserSchema = require("../schemas/googleUser.schema");
+
 const router = express.Router();
 
 router.get("/view", (req, res, next) => {
@@ -53,13 +55,18 @@ const getGoogleAccountFromCode = async (code, response) => {
   request(
     `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${tokens.id_token}`,
     { json: true },
-    (err, res, body) => {
+    async (err, res, body) => {
       if (err)
         response
           .status(500)
           .send(`some unexpected/uncaught async exception is thrown ${err}`);
-      userData = body;
-      console.log(">>> userData", userData);
+      console.log(">>> userData", body);
+      if (!(await googleUserSchema.findOne({ sub: body.sub }))) {
+        const userInfo = new googleUserSchema({ ...body });
+        await userInfo.save();
+      } else {
+        console.log(">>> user found");
+      }
       response.redirect("/data");
     }
   );

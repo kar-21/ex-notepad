@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 const indexRouter = require("./routes/index");
 const loginRouter = require("./routes/login");
@@ -45,6 +46,11 @@ app.use((err, req, res, next) => {
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening to port ${process.env.PORT}`);
+});
+
+mongoose.connect(process.env.MONGODB_API, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 module.exports = app;
