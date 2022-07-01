@@ -83,8 +83,8 @@ const getGoogleAccountFromCode = async (code, response) => {
       console.log(">>>", process.env.NODE_ENV === "development");
       response.redirect(
         process.env.NODE_ENV === "development"
-          ? `${process.env.FRONTEND_API_LOCAL}/token/?token=${token}`
-          : `${process.env.FRONTEND_API_PROD}/token/?token=${token}`
+          ? `${process.env.FRONTEND_API_LOCAL}/token/${token}`
+          : `${process.env.FRONTEND_API_PROD}/token/=${token}`
       );
     }
   );
