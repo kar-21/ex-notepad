@@ -20,8 +20,7 @@ router.get("/redirectURI", (req, res, next) => {
 });
 
 router.get("/user", async (req, res, next) => {
-  console.log('res', res.body, req.body)
-  const userFromDB = await googleUserSchema.findOne({ sub: req.body.sub });
+  const userFromDB = await googleUserSchema.findOne({ sub: req.query.sub });
   res.send(userFromDB);
 });
 
