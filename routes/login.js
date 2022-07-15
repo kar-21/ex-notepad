@@ -19,11 +19,6 @@ router.get("/redirectURI", (req, res, next) => {
   getGoogleAccountFromCode(req.query.code, res);
 });
 
-router.get("/user", async (req, res, next) => {
-  const userFromDB = await googleUserSchema.findOne({ sub: req.query.sub });
-  res.send(userFromDB);
-});
-
 const createConnection = () => {
   return new google.auth.OAuth2(
     process.env.CLIENT_ID,
