@@ -4,14 +4,13 @@ const notePadSchema = require("../schemas/notePad.schema");
 const router = express.Router();
 
 router.post("/:userId", async (req, res, next) => {
-  console.log(">>> s", req.params.userId);
   const note = await notePadSchema.findOne({
-    userId: req.url.slice(1),
+    userId: req.params.userId,
     noteId: req.body.id,
   });
   if (!note) {
     const newNote = new notePadSchema({
-      userId: req.url.slice(1),
+      userId: req.params.userId,
       noteId: req.body.id,
       title: req.body.title,
       content: req.body.content,
@@ -21,10 +20,10 @@ router.post("/:userId", async (req, res, next) => {
     res.sendStatus(200);
   } else {
     await notePadSchema.updateOne(
-      { userId: req.url.slice(1), noteId: req.body.id },
+      { userId: req.params.userId, noteId: req.body.id },
       {
         $set: {
-          userId: req.url.slice(1),
+          userId: req.params.userId,
           noteId: req.body.id,
           title: req.body.title,
           content: req.body.content,
