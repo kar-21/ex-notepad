@@ -35,4 +35,11 @@ router.post("/:userId", async (req, res, next) => {
   }
 });
 
+router.get("/:userId", async (req, res, next) => {
+  const note = await notePadSchema.find({
+    userId: req.params.userId,
+  });
+  res.send(note);
+});
+
 module.exports = router;
