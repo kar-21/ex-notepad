@@ -19,6 +19,16 @@ router.post("/:userId", async (req, res, next) => {
     newNote.save();
     res.sendStatus(200);
   } else {
+    res.send("Post Operation not permitted").sendStatus(405);
+  }
+});
+
+router.patch("/:userId", async (req, res, next) => {
+  const note = await notePadSchema.findOne({
+    userId: req.params.userId,
+    noteId: req.body.id,
+  });
+  if (note) {
     await notePadSchema.updateOne(
       { userId: req.params.userId, noteId: req.body.id },
       {
@@ -32,6 +42,8 @@ router.post("/:userId", async (req, res, next) => {
       }
     );
     res.sendStatus(200);
+  } else {
+    res.send("Post Operation not permitted").sendStatus(405);
   }
 });
 
