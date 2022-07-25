@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   const userFromDB = await googleUserSchema.findOne({ sub: req.query.sub });
-  res.send(userFromDB).sendStatus(200);
+  res.status(200).send(userFromDB);
 });
 
 module.exports = router;

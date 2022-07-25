@@ -19,7 +19,7 @@ router.post("/:userId", async (req, res, next) => {
     newNote.save();
     res.sendStatus(200);
   } else {
-    res.send("Post Operation not permitted").sendStatus(405);
+    res.status(405).send("Post Operation not permitted");
   }
 });
 
@@ -43,7 +43,7 @@ router.patch("/:userId", async (req, res, next) => {
     );
     res.sendStatus(200);
   } else {
-    res.send("Post Operation not permitted").sendStatus(405);
+    res.status(405).send("Post Operation not permitted");
   }
 });
 
