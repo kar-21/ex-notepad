@@ -1,11 +1,9 @@
 const express = require("express");
-const googleUserSchema = require("../schemas/googleUser.schema");
+
+const userController = require("../controller/user.controller");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const userFromDB = await googleUserSchema.findOne({ sub: req.query.sub });
-  res.status(200).send(userFromDB);
-});
+router.get("/", userController.getUserDetails);
 
 module.exports = router;
