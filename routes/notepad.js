@@ -10,4 +10,6 @@ router.patch("/:userId", notepadController.patchNote);
 
 router.get("/:userId", notepadController.getNotes);
 
+router.delete("/:userId", notepadController.deleteNotes);
+
 module.exports = router;

@@ -50,3 +50,10 @@ exports.getNotes = async (req, res, next) => {
   });
   res.send(note);
 };
+
+exports.deleteNotes = async (req, res, next) => {
+  const note = await notePadSchema.deleteOne({
+    userId: req.params.userId,
+  });
+  res.status(200).send(note);
+};
