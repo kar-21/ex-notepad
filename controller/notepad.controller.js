@@ -54,6 +54,7 @@ exports.getNotes = async (req, res, next) => {
 exports.deleteNotes = async (req, res, next) => {
   const note = await notePadSchema.deleteOne({
     userId: req.params.userId,
+    noteId: req.body.noteId,
   });
   res.status(200).send(note);
 };
