@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "start:dev": "nodemon app.js"
   },
   "dependencies": {
@@ -18,9 +18,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.1",
     "morgan": "~1.9.1",
+    "nodemon": "^2.0.19",
     "request": "^2.88.2"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.16"
-  }
+  "devDependencies": {}
 }
