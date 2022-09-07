@@ -48,9 +48,7 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Listening to port ${process.env.PORT}`);
-});
+app.listen(process.env.PORT);
 
 mongoose.connect(process.env.MONGODB_API, {
   useNewUrlParser: true,
