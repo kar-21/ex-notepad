@@ -3,12 +3,12 @@ const notePadSchema = require("../schemas/notePad.schema");
 exports.postNote = async (req, res, next) => {
   const note = await notePadSchema.findOne({
     userId: req.params.userId,
-    noteId: req.body.id,
+    noteId: req.body.noteId,
   });
   if (!note) {
     const newNote = new notePadSchema({
       userId: req.params.userId,
-      noteId: req.body.id,
+      noteId: req.body.noteId,
       title: req.body.title,
       content: req.body.content,
       color: req.body.color,
@@ -23,15 +23,15 @@ exports.postNote = async (req, res, next) => {
 exports.patchNote = async (req, res, next) => {
   const note = await notePadSchema.findOne({
     userId: req.params.userId,
-    noteId: req.body.id,
+    noteId: req.body.noteId,
   });
   if (note) {
     await notePadSchema.updateOne(
-      { userId: req.params.userId, noteId: req.body.id },
+      { userId: req.params.userId, noteId: req.body.noteId },
       {
         $set: {
           userId: req.params.userId,
-          noteId: req.body.id,
+          noteId: req.body.noteId,
           title: req.body.title,
           content: req.body.content,
           color: req.body.color,
