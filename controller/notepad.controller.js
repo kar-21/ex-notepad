@@ -40,7 +40,7 @@ exports.patchNote = async (req, res, next) => {
     );
     res.sendStatus(200);
   } else {
-    res.status(405).send("Post Operation not permitted");
+    res.status(405).send("Patch Operation not permitted");
   }
 };
 
@@ -48,7 +48,8 @@ exports.getNotes = async (req, res, next) => {
   const note = await notePadSchema.find({
     userId: req.params.userId,
   });
-  res.send(note);
+  if (note) res.send(note);
+  else res.status(404).send("No Notes Found");
 };
 
 exports.deleteNotes = async (req, res, next) => {
@@ -56,5 +57,6 @@ exports.deleteNotes = async (req, res, next) => {
     userId: req.params.userId,
     noteId: req.body.noteId,
   });
-  res.status(200).send(note);
+  if (note) res.status(200).send(note);
+  else res.status(405).send("Delete Operation not permitted");
 };

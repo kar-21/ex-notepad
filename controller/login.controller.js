@@ -9,12 +9,12 @@ exports.loginUrl = (req, res, next) => {
   if (url) {
     const message = { redirectURL: url };
     res.send(message);
-  }
-  res.send(500);
+  } else res.status(500).send("Can't retrieve redirect URL");
 };
 
 exports.getGoogleAccount = (req, res, next) => {
-  getGoogleAccountFromCode(req.query.code, res);
+  if (req.query.code) getGoogleAccountFromCode(req.query.code, res);
+  else res.status(400).send("No Code found in params");
 };
 
 const createConnection = () => {
