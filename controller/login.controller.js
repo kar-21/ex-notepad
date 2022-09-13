@@ -5,8 +5,12 @@ const jwt = require("jsonwebtoken");
 const googleUserSchema = require("../schemas/googleUser.schema");
 
 exports.loginUrl = (req, res, next) => {
-  const message = { redirectURL: urlGoogle() };
-  res.send(message);
+  const url = urlGoogle();
+  if (url) {
+    const message = { redirectURL: url };
+    res.send(message);
+  }
+  res.send(500);
 };
 
 exports.getGoogleAccount = (req, res, next) => {
@@ -55,7 +59,6 @@ const getGoogleAccountFromCode = async (code, response) => {
         response
           .status(500)
           .send(`some unexpected/uncaught async exception is thrown ${err}`);
-      console.log(">>> userData", body);
       let token;
       const userFromDB = await googleUserSchema.findOne({ sub: body.sub });
       if (!userFromDB) {
@@ -67,14 +70,12 @@ const getGoogleAccountFromCode = async (code, response) => {
           { expiresIn: "1d" }
         );
       } else {
-        console.log(">>> user found");
         token = jwt.sign(
           { userId: userFromDB.sub, givenName: userFromDB.givenName },
           process.env.SECRET,
           { expiresIn: "1d" }
         );
       }
-      console.log(">>>", process.env.NODE_ENV === "development");
       response.redirect(
         process.env.NODE_ENV === "development"
           ? `${process.env.FRONTEND_API_LOCAL}/token/${token}`
