@@ -12,6 +12,8 @@ exports.postNote = async (req, res, next) => {
       title: req.body.title,
       content: req.body.content,
       color: req.body.color,
+      dateOfCreation: Date.now(),
+      dateOfModification: Date.now(),
     });
     newNote.save();
     res.sendStatus(200);
@@ -35,6 +37,7 @@ exports.patchNote = async (req, res, next) => {
           title: req.body.title,
           content: req.body.content,
           color: req.body.color,
+          dateOfModification: Date.now(),
         },
       }
     );
