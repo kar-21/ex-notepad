@@ -6,6 +6,8 @@ const NotePadSchema = new Schema({
   title: String,
   content: String,
   color: String,
+  dateOfCreation: Date,
+  dateOfModification: Date,
 });
 
 module.exports = model("notePads", NotePadSchema);
